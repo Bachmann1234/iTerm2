@@ -4535,7 +4535,7 @@ scrollToFirstResult:(BOOL)scrollToFirstResult {
     return frame;
 }
 
-- (void)createFindCursorWindowWithFireworks:(BOOL)forceFireworks {
+- (void)createFindCursorWindowWithAnimation:(BOOL)forceFireworks forceSplash: (BOOL) forceSplash {
     [self scrollRectToVisible:[self cursorFrame]];
     self.findCursorWindow = [[[NSWindow alloc] initWithContentRect:NSZeroRect
                                                          styleMask:NSWindowStyleMaskBorderless
@@ -4553,6 +4553,11 @@ scrollToFirstResult:(BOOL)scrollToFirstResult {
                                                                                         0,
                                                                                         screenFrame.size.width,
                                                                                         screenFrame.size.height)];
+    } else if (forceSplash) {
+        self.findCursorView = [iTermFindCursorView newSplashViewWithFrame:NSMakeRect(0,
+                                                                                     0,
+                                                                                     screenFrame.size.width,
+                                                                                     screenFrame.size.height)];
     } else {
         self.findCursorView = [[iTermFindCursorView alloc] initWithFrame:NSMakeRect(0,
                                                                                     0,
@@ -4566,14 +4571,14 @@ scrollToFirstResult:(BOOL)scrollToFirstResult {
 }
 
 - (void)beginFindCursor:(BOOL)hold {
-    [self beginFindCursor:hold forceFireworks:NO];
+    [self beginFindCursor:hold forceFireworks:NO forceSplash: NO];
 }
 
-- (void)beginFindCursor:(BOOL)hold forceFireworks:(BOOL)forceFireworks {
+- (void)beginFindCursor:(BOOL)hold forceFireworks:(BOOL)forceFireworks forceSplash:(BOOL)forceSplash {
     _drawingHelper.cursorVisible = YES;
     [self setNeedsDisplayInRect:self.cursorFrame];
     if (!_findCursorView) {
-        [self createFindCursorWindowWithFireworks:forceFireworks];
+        [self createFindCursorWindowWithAnimation:forceFireworks forceSplash:forceSplash];
     }
     if (hold) {
         [_findCursorView startTearDownTimer];
@@ -4616,7 +4621,12 @@ scrollToFirstResult:(BOOL)scrollToFirstResult {
 }
 
 - (void)showFireworks {
-    [self beginFindCursor:YES forceFireworks:YES];
+    [self beginFindCursor:YES forceFireworks:YES forceSplash:NO];
+    [self placeFindCursorOnAutoHide];
+}
+
+- (void)showSplash {
+    [self beginFindCursor:YES forceFireworks:NO forceSplash:YES];
     [self placeFindCursorOnAutoHide];
 }
 

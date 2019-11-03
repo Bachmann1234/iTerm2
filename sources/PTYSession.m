@@ -9744,6 +9744,9 @@ scrollToFirstResult:(BOOL)scrollToFirstResult {
         case VT100AttentionRequestTypeFireworks:
             [_textview showFireworks];
             break;
+        case VT100AttentionRequestTypeSplash:
+            [_textview showSplash];
+            break;
         case VT100AttentionRequestTypeStopBouncingDockIcon:
             [NSApp cancelUserAttentionRequest:_requestAttentionId];
             break;

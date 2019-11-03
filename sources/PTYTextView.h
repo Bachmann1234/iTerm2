@@ -605,6 +605,8 @@ scrollToFirstResult:(BOOL)scrollToFirstResult;
 
 - (void)showFireworks;
 
+- (void)showSplash;
+
 - (BOOL)imageIsVisible:(iTermImageInfo *)image;
 
 // Turns on the flicker fixer (if enabled) while drawing.

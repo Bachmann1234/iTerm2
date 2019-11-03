@@ -2413,6 +2413,8 @@ static const int kMaxScreenRows = 4096;
     } else if ([key isEqualToString:@"RequestAttention"]) {
         if ([value isEqualToString:@"fireworks"]) {
             [delegate_ terminalRequestAttention:VT100AttentionRequestTypeFireworks];
+        } else if ([value isEqualToString:@"splash"]) {
+            [delegate_ terminalRequestAttention:VT100AttentionRequestTypeSplash];
         } else if ([value isEqualToString:@"once"]) {
             [delegate_ terminalRequestAttention:VT100AttentionRequestTypeBounceOnceDockIcon];
         } else if ([value isEqualToString:@"flash"]) {

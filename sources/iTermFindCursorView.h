@@ -25,6 +25,7 @@ extern const double kFindCursorHoldTime;
 @property(nonatomic, assign) BOOL stopping;
 
 + (instancetype)newFireworksViewWithFrame:(NSRect)frameRect;
++ (instancetype)newSplashViewWithFrame:(NSRect)frameRect;
 
 - (void)startTearDownTimer;
 - (void)stopTearDownTimer;

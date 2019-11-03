@@ -25,6 +25,9 @@ const double kFindCursorHoleRadius = 30;
 @interface iTermFindCursorViewStarsImpl : iTermFindCursorView
 @end
 
+@interface iTermFindCursorViewSplashImpl : iTermFindCursorView
+@end
+
 @interface iTermFindCursorViewArrowImpl : iTermFindCursorView
 @end
 
@@ -253,6 +256,123 @@ const double kFindCursorHoleRadius = 30;
 
 @end
 
+@implementation iTermFindCursorViewSplashImpl {
+    CAEmitterLayer *_emitterLayer;
+}
+
++ (instancetype)allocWithZone:(struct _NSZone *)zone {
+    return NSAllocateObject([self class], 0, zone);
+}
+
+- (void)dealloc {
+    [_emitterLayer release];
+    [super dealloc];
+}
+
+- (instancetype)initWithFrame:(NSRect)frameRect {
+    self = [super initWithFrame:frameRect];
+
+    if (self) {
+        [self setWantsLayer:YES];
+        _emitterLayer = [[CAEmitterLayer layer] retain];
+        _emitterLayer.emitterPosition = CGPointMake(self.bounds.size.width/2, self.bounds.size.height*(.75));
+        _emitterLayer.renderMode = kCAEmitterLayerAdditive;
+        _emitterLayer.emitterShape = kCAEmitterLayerPoint;
+
+        // If the emitter layer has multiple emitterCells then it shows white boxes on 10.10.2. So instead
+        // we create an invisible cell and give it multiple emitterCells.
+        _emitterLayer.emitterCells = @[ [self rootEmitterCell] ];
+        [self.layer addSublayer:_emitterLayer];
+    }
+    return self;
+}
+
+- (void)setCursorPosition:(NSPoint)cursorPosition {
+    [super setCursorPosition:cursorPosition];
+    _emitterLayer.emitterPosition = cursorPosition;
+
+    CAShapeLayer *mask = [[[CAShapeLayer alloc] init] autorelease];
+
+    NSBezierPath *outerPath = [NSBezierPath bezierPath];
+    outerPath.windingRule = NSEvenOddWindingRule;
+
+    NSBezierPath *path = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(cursorPosition.x - 20,
+                                                                           cursorPosition.y - 20,
+                                                                           40,
+                                                                           40)];
+    [outerPath appendBezierPath:path];
+    [outerPath appendBezierPath:[NSBezierPath bezierPathWithRect:self.bounds]];
+    mask.fillRule = kCAFillRuleEvenOdd;
+    mask.path = [outerPath iterm_CGPath];
+    mask.fillColor = [[NSColor whiteColor] CGColor];
+    self.layer.mask = mask;
+}
+
+#pragma mark - Private methods
+
+- (CAEmitterCell *)rootEmitterCell {
+    CAEmitterCell *supercell = [self supercell];
+    float v = 1000;
+    float b = 100;
+    supercell.emitterCells = @[ [self subcellWithImageNumber:1 birthRate:b/5 velocity:v delay:0],
+                                [self subcellWithImageNumber:2 birthRate:b/5 velocity:v delay:0],
+                                [self subcellWithImageNumber:3 birthRate:b/5 velocity:v delay:0],
+                                [self subcellWithImageNumber:1 birthRate:b velocity:v/10 delay:0],
+                                [self subcellWithImageNumber:2 birthRate:b velocity:v/10 delay:0],
+                                [self subcellWithImageNumber:3 birthRate:b velocity:v/10 delay:0]];
+    return supercell;
+}
+
+- (CAEmitterCell *)supercell {
+    CAEmitterCell *cell = [CAEmitterCell emitterCell];
+    [cell setBirthRate:4];
+    [cell setVelocity:0];
+    [cell setVelocityRange:0];
+    [cell setEmissionLongitude:M_PI_2];
+    [cell setEmissionRange:M_PI * 2];
+    [cell setScale:0];
+    [cell setScaleSpeed:0];
+    [cell setYAcceleration:0];
+    [cell setScaleRange:0];
+    [cell setAlphaSpeed:0];
+    [cell setLifetime:0.75];
+    [cell setLifetimeRange:0.25];
+    [cell setSpin:M_PI * 6];
+    [cell setSpinRange:M_PI * 2];
+
+    return cell;
+}
+
+- (CAEmitterCell *)subcellWithImageNumber:(int)imageNumber
+                                birthRate:(float)birthRate
+                                 velocity:(float)v
+                                    delay:(float)delay {
+    CAEmitterCell *cell = [CAEmitterCell emitterCell];
+    [cell setBirthRate:birthRate];
+    [cell setEmissionLongitude:M_PI_2];
+    [cell setEmissionRange:M_PI * 2];
+    [cell setScale:0];
+    [cell setVelocity:v];
+    [cell setVelocityRange:v * 0.1];
+    [cell setScaleSpeed:0.3];
+    [cell setScaleRange:0.1];
+    NSString *name = [NSString stringWithFormat:@"FindCursorCell%d", imageNumber];
+    NSImage *image = [NSImage it_imageNamed:name forClass:self.class];
+    if (image) {
+        [cell setContents:(id)[image CGImageForProposedRect:nil context:nil hints:nil]];
+    }
+    float lifetime = 1;
+    [cell setAlphaSpeed:-1 / lifetime];
+    [cell setLifetime:lifetime];
+    [cell setLifetimeRange: lifetime * 0.3];
+    [cell setSpin:M_PI * 6];
+    [cell setSpinRange:M_PI * 2];
+    [cell setBeginTime:delay];
+    return cell;
+}
+
+@end
+
 #pragma mark -
 
 @implementation iTermFindCursorView {
@@ -275,6 +395,10 @@ const double kFindCursorHoleRadius = 30;
 
 + (instancetype)newFireworksViewWithFrame:(NSRect)frameRect {
     return [[iTermFindCursorViewStarsImpl alloc] initWithFrame:frameRect];
+}
+
++ (instancetype)newSplashViewWithFrame:(NSRect)frameRect {
+    return [[iTermFindCursorViewSplashImpl alloc] initWithFrame:frameRect];
 }
 
 - (void)setCursorPosition:(NSPoint)cursorPosition {
