@@ -276,12 +276,9 @@ const double kFindCursorHoleRadius = 30;
         [self setWantsLayer:YES];
         _emitterLayer = [[CAEmitterLayer layer] retain];
         _emitterLayer.emitterPosition = CGPointMake(self.bounds.size.width/2, self.bounds.size.height*(.75));
-        _emitterLayer.renderMode = kCAEmitterLayerAdditive;
-        _emitterLayer.emitterShape = kCAEmitterLayerPoint;
-
-        // If the emitter layer has multiple emitterCells then it shows white boxes on 10.10.2. So instead
-        // we create an invisible cell and give it multiple emitterCells.
-        _emitterLayer.emitterCells = @[ [self rootEmitterCell] ];
+        _emitterLayer.renderMode = kCAEmitterLayerOutline;
+        _emitterLayer.emitterShape = kCAEmitterLayerCircle;
+        _emitterLayer.emitterCells = self.splashCells;
         [self.layer addSublayer:_emitterLayer];
     }
     return self;
@@ -291,7 +288,6 @@ const double kFindCursorHoleRadius = 30;
     [super setCursorPosition:cursorPosition];
     _emitterLayer.emitterPosition = cursorPosition;
 
-    CAShapeLayer *mask = [[[CAShapeLayer alloc] init] autorelease];
 
     NSBezierPath *outerPath = [NSBezierPath bezierPath];
     outerPath.windingRule = NSEvenOddWindingRule;
@@ -302,26 +298,9 @@ const double kFindCursorHoleRadius = 30;
                                                                            40)];
     [outerPath appendBezierPath:path];
     [outerPath appendBezierPath:[NSBezierPath bezierPathWithRect:self.bounds]];
-    mask.fillRule = kCAFillRuleEvenOdd;
-    mask.path = [outerPath iterm_CGPath];
-    mask.fillColor = [[NSColor whiteColor] CGColor];
-    self.layer.mask = mask;
 }
 
 #pragma mark - Private methods
-
-- (CAEmitterCell *)rootEmitterCell {
-    CAEmitterCell *supercell = [self supercell];
-    float v = 1000;
-    float b = 100;
-    supercell.emitterCells = @[ [self splashCell:b/5 velocity:v delay:0],
-                                [self splashCell:b/5 velocity:v delay:0],
-                                [self splashCell:b/5 velocity:v delay:0],
-                                [self splashCell:b velocity:v/10 delay:0],
-                                [self splashCell:b velocity:v/10 delay:0],
-                                [self splashCell:b velocity:v/10 delay:0]];
-    return supercell;
-}
 
 - (CAEmitterCell *)supercell {
     CAEmitterCell *cell = [CAEmitterCell emitterCell];
@@ -343,31 +322,33 @@ const double kFindCursorHoleRadius = 30;
     return cell;
 }
 
-- (CAEmitterCell *)splashCell:(float)birthRate
-                              velocity:(float)v
-                              delay:(float)delay {
-    CAEmitterCell *cell = [CAEmitterCell emitterCell];
-    [cell setBirthRate:birthRate];
-    [cell setEmissionLongitude:M_PI_2];
-    [cell setEmissionRange:M_PI * 2];
-    [cell setScale:0];
-    [cell setVelocity:v];
-    [cell setVelocityRange:v * 0.1];
-    [cell setScaleSpeed:0.3];
-    [cell setScaleRange:0.1];
-    NSString *name = @"circleSplash";
-    NSImage *image = [NSImage it_imageNamed:name forClass:self.class];
-    if (image) {
-        [cell setContents:(id)[image CGImageForProposedRect:nil context:nil hints:nil]];
+- (NSArray *)splashCells {
+    float v = 150;
+     NSMutableArray *cells = [NSMutableArray array];
+    for (int i = 0; i <= 10; i++)
+    {
+        CAEmitterCell *cell = [CAEmitterCell emitterCell];
+        [cell setBirthRate:1];
+        [cell setEmissionLongitude:M_PI_2];
+        [cell setEmissionRange:M_PI_2/2];
+        [cell setScale:.05];
+        [cell setRedRange:255];
+        [cell setBlueRange:255];
+        [cell setGreenRange:255];
+        [cell setVelocity:v];
+        NSString *name = @"circleSplash";
+        NSImage *image = [NSImage it_imageNamed:name forClass:self.class];
+        if (image) {
+            [cell setContents:(id)[image CGImageForProposedRect:nil context:nil hints:nil]];
+        }
+        float lifetime = .3;
+        [cell setLifetime:lifetime];
+        [cell setLifetimeRange: lifetime * 0.3];
+        [cell setBeginTime:0];
+        [cells addObject:(id)cell];
     }
-    float lifetime = 1;
-    [cell setAlphaSpeed:-1 / lifetime];
-    [cell setLifetime:lifetime];
-    [cell setLifetimeRange: lifetime * 0.3];
-    [cell setSpin:M_PI * 6];
-    [cell setSpinRange:M_PI * 2];
-    [cell setBeginTime:delay];
-    return cell;
+    return cells;
+    
 }
 
 @end
