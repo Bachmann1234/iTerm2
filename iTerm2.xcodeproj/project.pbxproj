@@ -1442,6 +1442,8 @@
 		53FF984B20967806008688D7 /* iTermMetalDeviceProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 53FF984920967805008688D7 /* iTermMetalDeviceProvider.h */; };
 		53FF984C20967806008688D7 /* iTermMetalDeviceProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 53FF984A20967805008688D7 /* iTermMetalDeviceProvider.m */; };
 		5ECE005F1454E59B004861E9 /* PseudoTerminalRestorer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5ECE005D1454E59B004861E9 /* PseudoTerminalRestorer.h */; };
+		611715F423723D7D00AE6986 /* circleSplash.png in Resources */ = {isa = PBXBuildFile; fileRef = 611715F323723D7C00AE6986 /* circleSplash.png */; };
+		611715F523723D7D00AE6986 /* circleSplash.png in Resources */ = {isa = PBXBuildFile; fileRef = 611715F323723D7C00AE6986 /* circleSplash.png */; };
 		7581C4E120A38E0F00699F99 /* iTermHyperlinkTrigger.h in Headers */ = {isa = PBXBuildFile; fileRef = 7581C4DD20A38DF900699F99 /* iTermHyperlinkTrigger.h */; };
 		874206490564169600CFC3F1 /* iTermApplicationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 20D5CC6304E7AA0500000106 /* iTermApplicationDelegate.h */; };
 		874206530564169600CFC3F1 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0464AB2F006CD2EC7F000001 /* AppKit.framework */; };
@@ -4679,6 +4681,7 @@
 		53FF984A20967805008688D7 /* iTermMetalDeviceProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iTermMetalDeviceProvider.m; sourceTree = "<group>"; };
 		5ECE005D1454E59B004861E9 /* PseudoTerminalRestorer.h */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = PseudoTerminalRestorer.h; sourceTree = "<group>"; tabWidth = 4; };
 		5ECE005E1454E59B004861E9 /* PseudoTerminalRestorer.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = PseudoTerminalRestorer.m; sourceTree = "<group>"; tabWidth = 4; };
+		611715F323723D7C00AE6986 /* circleSplash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = circleSplash.png; path = images/circleSplash.png; sourceTree = "<group>"; };
 		7581C4DD20A38DF900699F99 /* iTermHyperlinkTrigger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iTermHyperlinkTrigger.h; sourceTree = "<group>"; };
 		7581C4DE20A38DF900699F99 /* iTermHyperlinkTrigger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iTermHyperlinkTrigger.m; sourceTree = "<group>"; };
 		8742065A0564169600CFC3F1 /* iTerm2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iTerm2.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -7220,6 +7223,7 @@
 				A68E33321DE746F5003F1D8E /* Previous Mark Touch Bar Icon@2x.png */,
 				1DC2AF4F19521CFF005769D5 /* QuestionMarkSign.png */,
 				1DC2AF5019521CFF005769D5 /* QuestionMarkSign@2x.png */,
+				611715F323723D7C00AE6986 /* circleSplash.png */,
 				1DBBA5DC1B3CB0590026E3B6 /* restore-arrangement.png */,
 				1DBBA5DD1B3CB0590026E3B6 /* restore-arrangement@2x.png */,
 				1D99C8E21BD59C37001EE1FC /* SearchCursor.png */,
@@ -11980,6 +11984,7 @@
 				A6F7A747213CB143004DE961 /* StatusBarIconPaste@2x.png in Resources */,
 				1D44D00F1CC7F5A600BE5630 /* PTYTextViewTest-golden-testDimmingTextAndCursorBoostAndMinimumContrast.png in Resources */,
 				1D44CFBC1CC7F5A600BE5630 /* PTYTextViewTest-golden-nonretina-testIMEWithAmbiguousIsNotDoubleWidth.png in Resources */,
+				611715F523723D7D00AE6986 /* circleSplash.png in Resources */,
 				1D44D0411CC7F5A600BE5630 /* PTYTextViewTest-golden-testSurrogatePairWithCombiningMark.png in Resources */,
 				53FF981D20927F1E008688D7 /* template_pyenv_simple.py in Resources */,
 				1D44CFAC1CC7F5A600BE5630 /* PTYTextViewTest-golden-nonretina-testDimmingTextAndBgAndMinimumContrast.png in Resources */,
@@ -12235,6 +12240,7 @@
 				A67F61CA214395C60093940A /* graphic_shell.png in Resources */,
 				A67D0D4A1A2EE12A003A8B35 /* configPanel.strings in Resources */,
 				A66F52D32106F6F100571168 /* gitdown@2x.png in Resources */,
+				611715F423723D7D00AE6986 /* circleSplash.png in Resources */,
 				A67D0D531A2EE12A003A8B35 /* GlobalSearch.xib in Resources */,
 				A61BB46421CA2D5A0027F47D /* iTerm2Script.icns in Resources */,
 				A67D0D8F1A2EE12A003A8B35 /* TmuxDashboard.xib in Resources */,

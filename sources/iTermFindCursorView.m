@@ -314,12 +314,12 @@ const double kFindCursorHoleRadius = 30;
     CAEmitterCell *supercell = [self supercell];
     float v = 1000;
     float b = 100;
-    supercell.emitterCells = @[ [self subcellWithImageNumber:1 birthRate:b/5 velocity:v delay:0],
-                                [self subcellWithImageNumber:2 birthRate:b/5 velocity:v delay:0],
-                                [self subcellWithImageNumber:3 birthRate:b/5 velocity:v delay:0],
-                                [self subcellWithImageNumber:1 birthRate:b velocity:v/10 delay:0],
-                                [self subcellWithImageNumber:2 birthRate:b velocity:v/10 delay:0],
-                                [self subcellWithImageNumber:3 birthRate:b velocity:v/10 delay:0]];
+    supercell.emitterCells = @[ [self splashCell:b/5 velocity:v delay:0],
+                                [self splashCell:b/5 velocity:v delay:0],
+                                [self splashCell:b/5 velocity:v delay:0],
+                                [self splashCell:b velocity:v/10 delay:0],
+                                [self splashCell:b velocity:v/10 delay:0],
+                                [self splashCell:b velocity:v/10 delay:0]];
     return supercell;
 }
 
@@ -343,10 +343,9 @@ const double kFindCursorHoleRadius = 30;
     return cell;
 }
 
-- (CAEmitterCell *)subcellWithImageNumber:(int)imageNumber
-                                birthRate:(float)birthRate
-                                 velocity:(float)v
-                                    delay:(float)delay {
+- (CAEmitterCell *)splashCell:(float)birthRate
+                              velocity:(float)v
+                              delay:(float)delay {
     CAEmitterCell *cell = [CAEmitterCell emitterCell];
     [cell setBirthRate:birthRate];
     [cell setEmissionLongitude:M_PI_2];
@@ -356,7 +355,7 @@ const double kFindCursorHoleRadius = 30;
     [cell setVelocityRange:v * 0.1];
     [cell setScaleSpeed:0.3];
     [cell setScaleRange:0.1];
-    NSString *name = [NSString stringWithFormat:@"FindCursorCell%d", imageNumber];
+    NSString *name = @"circleSplash";
     NSImage *image = [NSImage it_imageNamed:name forClass:self.class];
     if (image) {
         [cell setContents:(id)[image CGImageForProposedRect:nil context:nil hints:nil]];
